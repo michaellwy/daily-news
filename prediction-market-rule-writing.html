@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing Prediction-Market Rules That Don't Need a Judge</title>
+<style>
+  :root{
+    --bg:#0e1014; --panel:#161922; --panel2:#1b1f29; --ink:#e9ebef; --muted:#9aa3b2;
+    --line:#272c38; --accent:#6aa3ff; --accent2:#8a6cff; --warn:#ffb454; --bad:#ff6b6b;
+    --good:#43d17f; --chip:#222734;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font:17px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px; margin:0 auto; padding:56px 24px 110px}
+  header.top{border-bottom:1px solid var(--line); padding-bottom:26px; margin-bottom:14px}
+  .kicker{color:var(--accent); font-size:13px; font-weight:700; letter-spacing:.12em; text-transform:uppercase}
+  h1{font-size:34px; line-height:1.2; margin:10px 0 12px; letter-spacing:-.02em}
+  .standfirst{color:var(--muted); font-size:18px; line-height:1.6}
+  .byline{margin-top:16px; color:var(--muted); font-size:13.5px}
+  h2{font-size:24px; margin:46px 0 12px; letter-spacing:-.01em; padding-top:8px}
+  h3{font-size:18.5px; margin:30px 0 8px}
+  h4{font-size:15px; margin:20px 0 6px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em}
+  p{margin:0 0 16px}
+  a{color:var(--accent); text-decoration:none} a:hover{text-decoration:underline}
+  .muted{color:var(--muted)}
+  strong{color:#fff}
+  em{color:#eef0f4}
+  .toc{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin:24px 0 8px; font-size:14.5px}
+  .toc b{display:block; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-size:12px; margin-bottom:8px}
+  .toc ol{margin:0; padding-left:20px}
+  .toc li{margin:4px 0}
+  blockquote.thesis{margin:26px 0; padding:18px 22px; border-left:3px solid var(--accent2);
+    background:linear-gradient(90deg,rgba(138,108,255,.10),rgba(138,108,255,0)); border-radius:8px;
+    font-size:19px; line-height:1.55; color:#f1f0ff}
+  .note{background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:10px; padding:14px 18px; margin:20px 0; font-size:14.5px}
+  .grid4{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:18px 0}
+  .ccard{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px}
+  .ccard .big{font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent)}
+  .ccard h3{margin:6px 0 6px; font-size:17px}
+  .ccard p{font-size:14px; margin:0; color:var(--muted)}
+  .ccard .fail{display:block; margin-top:10px; font-size:12.5px; color:var(--bad)}
+  ol.canons{counter-reset:c; list-style:none; padding:0; margin:18px 0}
+  ol.canons>li{counter-increment:c; position:relative; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:16px 18px 16px 58px; margin:12px 0}
+  ol.canons>li::before{content:counter(c); position:absolute; left:16px; top:16px; width:28px; height:28px;
+    background:var(--accent2); color:#0c0c14; font-weight:800; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px}
+  ol.canons>li b{font-size:16px}
+  ol.canons .why{display:block; margin-top:6px; font-size:13.5px; color:var(--muted)}
+  .rewrite{border:1px solid var(--line); border-radius:14px; overflow:hidden; margin:20px 0; background:var(--panel)}
+  .rewrite .head{padding:12px 18px; background:var(--panel2); border-bottom:1px solid var(--line); font-weight:700; font-size:15px}
+  .rewrite .head span{color:var(--muted); font-weight:400; font-size:13px}
+  .block{padding:14px 18px; font-size:14.5px}
+  .block.before{border-left:3px solid var(--bad)}
+  .block.after{border-left:3px solid var(--good); border-top:1px solid var(--line)}
+  .block .lab{font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px}
+  .before .lab{color:var(--bad)} .after .lab{color:var(--good)}
+  .rule{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:13px; line-height:1.6;
+    background:#0c0e13; border:1px solid var(--line); border-radius:8px; padding:12px 14px; color:#d4d8e0; white-space:pre-wrap}
+  .annot{list-style:none; padding:0; margin:12px 0 2px}
+  .annot li{position:relative; padding-left:24px; margin:7px 0; font-size:13.5px; color:var(--muted)}
+  .annot li::before{content:"\2192"; position:absolute; left:0; color:var(--good); font-weight:700}
+  .limit{background:#1a1410; border:1px solid #3a2a1c; border-left:3px solid var(--warn); border-radius:10px; padding:16px 18px; margin:20px 0}
+  .limit h3{margin-top:0; color:var(--warn)}
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+  th,td{padding:9px 12px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line)}
+  th{background:var(--panel2); color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em}
+  hr{border:none; border-top:1px solid var(--line); margin:40px 0}
+  footer{margin-top:54px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px}
+  @media (max-width:620px){ .grid4{grid-template-columns:1fr} h1{font-size:27px} .wrap{padding:36px 18px 80px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Prediction Market Design</div>
+  <h1>Writing Prediction-Market Rules That Don't Need a Judge</h1>
+  <p class="standfirst">A rule is a function from the state of the world to a payout. A dispute is that function failing. If I ran Polymarket, I would treat rule-writing as the engineering of total, deterministic, verifiable, capture-resistant functions, and I would design the residual for everything that engineering cannot reach.</p>
+  <div class="byline">A first-principles essay, grounded in a database of fourteen sourced Polymarket resolution disputes (2024 to mid-2026). No em dashes used by design.</div>
+</header>
+
+<div class="toc">
+  <b>Contents</b>
+  <ol>
+    <li><a href="#frame">The problem, stated precisely</a></li>
+    <li><a href="#theory">Theory: when is a rule well-posed?</a></li>
+    <li><a href="#deeper">Four deeper principles drafters get wrong</a></li>
+    <li><a href="#practice">Practice: a drafting protocol</a></li>
+    <li><a href="#process">Process: controls around the words</a></li>
+    <li><a href="#gauntlet">The pre-listing gauntlet</a></li>
+    <li><a href="#limits">What rules cannot fix</a></li>
+    <li><a href="#rewrites">Concrete rewrites of real markets</a></li>
+    <li><a href="#skeleton">A reusable rule skeleton</a></li>
+    <li><a href="#close">Closing principle</a></li>
+  </ol>
+</div>
+
+<section id="frame">
+  <h2>1. The problem, stated precisely</h2>
+  <p>Start with what a market rule actually is. Strip away the prose and a rule is a <strong>function</strong>: it takes the realized state of the world at a resolution time and returns an outcome, YES, NO, or a point on a scale. Trading is the market pricing the probability that this function will return YES. Everything depends on the function being well defined.</p>
+  <p>So define a dispute precisely. A dispute is not bad luck or a sore loser. A dispute is a <strong>defect in the function</strong>, and there are only four kinds:</p>
+  <table>
+    <thead><tr><th>Defect</th><th>Formal failure</th><th>Plain version</th></tr></thead>
+    <tbody>
+      <tr><td>Gap</td><td>The function is not total</td><td>The world did something the rule never assigned an outcome to.</td></tr>
+      <tr><td>Ambiguity</td><td>The function is not deterministic</td><td>Two honest readers with the same facts compute different outcomes.</td></tr>
+      <tr><td>Unverifiability</td><td>The inputs are not observable</td><td>Nobody can cheaply prove which state actually occurred.</td></tr>
+      <tr><td>Capture</td><td>The function is not incentive-robust</td><td>A motivated resolver can profitably return the wrong outcome.</td></tr>
+    </tbody>
+  </table>
+  <p>This reframing matters because it locates the problem. Polymarket reports that only about 0.2 percent of contracts ever trigger a UMA vote. The oracle, in other words, is a rare event. It is invoked precisely when the rule has <em>already failed</em>, when the function did not return a clean answer on its own. The fourteen documented disputes are not fourteen oracle failures. They are fourteen drafting failures that then exposed the oracle to a load it was never meant to carry.</p>
+  <blockquote class="thesis">The oracle is not the first line of defense against disputes. The rule is. By the time a market reaches a token vote, the interesting mistake has already been made on paper. Fix the paper and the vote rarely happens; and when it does, a clean rule makes the truthful answer the obvious one.</blockquote>
+  <p>That is the whole thesis. The rest is how.</p>
+</section>
+
+<section id="theory">
+  <h2>2. Theory: when is a rule well-posed?</h2>
+  <p>Borrow the mathematician's notion of a well-posed problem and the lawyer's instinct for airtight conditions, and you get four properties a rule must have. Call them the <strong>Four C's</strong>. They map one-to-one onto the four defects above, which is the point: a rule that has all four cannot produce a dispute by construction.</p>
+
+  <div class="grid4">
+    <div class="ccard">
+      <div class="big">C1</div>
+      <h3>Complete</h3>
+      <p>The rule assigns an outcome to every state of the world that can actually occur, including cancellation, postponement, partial performance, retraction, ties, and impossibility.</p>
+      <span class="fail">Prevents: gaps</span>
+    </div>
+    <div class="ccard">
+      <div class="big">C2</div>
+      <h3>Clear</h3>
+      <p>Every operative term bottoms out in an observable primitive. Two adversaries with the full record are <em>forced</em> to agree on the output.</p>
+      <span class="fail">Prevents: ambiguity</span>
+    </div>
+    <div class="ccard">
+      <div class="big">C3</div>
+      <h3>Checkable</h3>
+      <p>The inputs are read from one pre-named source of truth, with a deterministic tie-break waterfall if that source is silent.</p>
+      <span class="fail">Prevents: unverifiability</span>
+    </div>
+    <div class="ccard">
+      <div class="big">C4</div>
+      <h3>Capture-resistant</h3>
+      <p>The correct output is a focal point so obvious that no economically motivated minority can plausibly argue for another. Clarity is the best defense against a captured vote.</p>
+      <span class="fail">Prevents: capture</span>
+    </div>
+  </div>
+
+  <p>The first three properties concern the rule as a piece of writing. The fourth concerns the rule as a thing played against an adversarial resolver, and it is the property drafters forget. The two halves are <strong>complements, not substitutes</strong>. A token-voted oracle resolves disputes by finding a Schelling point, the answer voters expect other voters to pick. When the rule is clear, that focal point is the truth, and deviating from it is irrational. When the rule is vague, the focal point drifts toward whatever the largest holders want, because there is no objective anchor to coordinate on. You cannot fix a vague rule with a better oracle, and you cannot fully fix a capturable oracle with a better rule, but a clear rule shrinks the oracle's job to almost nothing and removes the cover that capture needs.</p>
+
+  <p>One operational test captures C2 better than any definition. I will call it the <strong>adversarial agreement test</strong>: imagine two well-funded opponents, each betting the opposite side, each holding the complete evidentiary record at the resolution instant. If a neutral could still side with either of them, the rule is not clear, it is a coin flip wearing a contract. Do not list it as written. This is stricter than the lawyer's "reasonable person" standard on purpose, because in a prediction market the readers are not reasonable, they are paid to disagree.</p>
+</section>
+
+<section id="deeper">
+  <h2>3. Four deeper principles drafters get wrong</h2>
+
+  <h3>3.1 Prefer rules to standards, because here the cost structure inverts</h3>
+  <p>Law-and-economics has a classic distinction (Kaplow, <em>Rules versus Standards</em>, 1992). A <strong>rule</strong> fixes content in advance: "blood alcohol above 0.08." A <strong>standard</strong> defers content to the moment of application: "driving too impaired to be safe." Rules cost more to write and less to apply; standards cost less to write and more to apply, and they create uncertainty until applied. Ordinary institutions tolerate standards because a trained, neutral judge applies them cheaply and consistently.</p>
+  <p>Prediction markets invert this. The entity applying the standard is a crowd of token holders who are anonymous, untrained, economically interested, and concentrated. Reporting on the UMA vote shows roughly half of voting power in about ten wallets and a financial stake on at least one side in close to a fifth of disputes. Handing a standard to that body is the most expensive possible way to resolve a question. The phrase "a consensus of credible reporting," which recurs across the Zelenskyy suit, the UFO declassification, the Trump-Xi call, and the Venezuela election markets, is a standard, and it is the single most dispute-prone clause in the entire dataset. <strong>If you must choose between a rule that is annoying to write and a standard that is pleasant to write, write the rule.</strong> The drafting cost is paid once by you; the application cost is paid repeatedly by your users and your credibility.</p>
+
+  <h3>3.2 Completeness is impossible, so design the residual</h3>
+  <p>Contract theory has known since Grossman, Hart, and Moore that every contract is incomplete. You cannot foresee every contingency, and a market rule is no exception. The mistake is to chase an impossible completeness and, having failed, to leave the unforeseen case to ad hoc escalation. The correct move is the one mature contracts make: pre-commit a <strong>default for the unforeseen</strong>. Commercial contracts call it force majeure, and it does not try to predict the disaster; it allocates the consequences of <em>any</em> disaster in advance (the deal voids, risk falls here, notice is due there).</p>
+  <p>A market rule needs the same: a deterministic residual clause that fires whenever the named referent becomes unevaluable. "If the referenced event is cancelled, indefinitely postponed beyond the cutoff, or the resolution source ceases to publish, this market resolves [N/A and refunds] / [NO]." The residual does not need to be clever. It needs to exist and to resolve without a judgment call. Most of the fourteen disputes reached a vote only because no residual existed and discretion rushed into the vacuum.</p>
+
+  <h3>3.3 Choose your referents, do not just choose your words</h3>
+  <p>This is the deepest fix and the one most drafters miss. Clarity is not only a property of <em>wording</em>; it is a property of the <em>fact you point at</em>. Some facts become common knowledge the instant they occur: a final score, a filed 8-K, a number in an official gazette, a roll-call vote. Other "facts" are permanently contested social judgments: whether a garment is a suit, whether media coverage has reached "consensus," whether a fraudulent election was "won." No wording can make a contested social judgment determinate, because the contest is in the world, not in your sentence.</p>
+  <p>So the first question is not "how do I phrase this?" but "<strong>does this market bottom out in an institutionally certified, observable event, or in a contested judgment?</strong>" The Venezuela market failed because it referenced who "won" an election that two institutions scored differently. The "consensus of credible reporting" markets fail because they reference the <em>state of media consensus</em>, an object that is itself manipulable and unfixed. Reference the certified primitive (the electoral authority's published tally, the wire photo, the filing), never the social gloss on it. If no such primitive exists, the honest answer is that the market should not be listed in binary form, or should carry an explicit, named human resolver and drop the pretense of objectivity.</p>
+
+  <h3>3.4 Mind the gap between letter and spirit, in both directions</h3>
+  <p>A naive reading of all this says: be maximally literal. But hyper-literalism creates its own injustices, and the data shows both failure directions. The TikTok market resolved YES on a literally "enacted" ban that was never enforced, letter beating spirit. The Strategy market resolved NO even though the company had literally sold bitcoin before the deadline, because the disclosure landed a day late, an interpretation arguably betraying the question's intent. A rule is not good because it is pedantic. A rule is good when <strong>its literal trigger and the question's evident intent are the same object</strong>. The craft is to choose a trigger that <em>is</em> the intent, so that enforcing the letter enforces the spirit. When you cannot, you have chosen the wrong trigger, and you should change the trigger, not lean on a judge to reconcile the two later.</p>
+</section>
+
+<section id="practice">
+  <h2>4. Practice: a drafting protocol</h2>
+  <p>The theory cashes out as a seven-canon protocol. Each canon serves one or more of the Four C's and is justified by a documented failure.</p>
+
+  <ol class="canons">
+    <li><b>Define each operative term by necessary-and-sufficient conditions that terminate in observables.</b>
+      <span class="why">Not by examples ("such as a jacket and trousers"), which under-determine the edges, but by conditions a checker can verify without taste. Terminate the regress at an observable primitive; that is the stopping rule for "how defined is defined enough." Serves C2. Failure prevented: Zelenskyy "suit," Cardi B "perform."</span></li>
+    <li><b>Name one source of truth, then a tie-break waterfall.</b>
+      <span class="why">"The official tally published at [URL]; if unavailable, the consensus of [Reuters, AP, AFP]; if those conflict, NO." One primary source, then named fallbacks in order, then a default. Never two co-equal sources that can disagree. Serves C3. Failure prevented: Venezuela (official vs credible reporting pointing opposite ways).</span></li>
+    <li><b>Fix the clock explicitly: occurrence vs publication, time zone, exact instant, and a bounded disclosure grace window.</b>
+      <span class="why">State whether the trigger is when the event happens or when it is disclosed, in which time zone, to the second; and if disclosure lags occurrence (filings, audits), grant a stated grace window so a one-day-late report still counts, but bound it so the market can close. Serves C1 and C2. Failure prevented: Strategy (occurrence vs disclosure), Thailand ("Too Early").</span></li>
+    <li><b>Enumerate the edge cases and pre-commit their outcomes.</b>
+      <span class="why">Cancellation, postponement past the cutoff, partial performance, retraction of a result, ties, double-counting, and the referent becoming impossible. A market about a game must say what happens if the game is abandoned; a market about a person doing X must say what happens if X is undone. Serves C1. Failure prevented: Israel-Hezbollah (which entity counts), the Astros-Dodgers finalize-then-correct gap.</span></li>
+    <li><b>Write a deterministic residual default, and default against the drafter.</b>
+      <span class="why">When the enumerated cases run out, a catch-all must resolve without discretion. And when ambiguity is genuinely latent (revealed only by an unforeseen event), resolve it the way contract law resolves drafter ambiguity: <em>contra proferentem</em>, against the party who wrote it. In practice that means the platform eats its own vagueness via void-and-refund, rather than letting a coin-flip vote decide. The default for "nothing clearly happened" should be NO or VOID, never "escalate." Serves C1 and C4.</span></li>
+    <li><b>Bind the title to the body.</b>
+      <span class="why">The headline is marketing, the body is the contract, and they must not contradict. A market titled "Trump speaks to Xi" whose body turns on "consensus of credible reporting" invites traders to price the title and dispute the body. The title should be a faithful precis of the operative trigger. Serves C2 and C4. Failure prevented: Trump-Xi, Barron Trump.</span></li>
+    <li><b>Freeze and version the rule; pre-register the interpretive authority for true gaps.</b>
+      <span class="why">No retroactive edits after a market opens. If a clarification is unavoidable, it is a new version, timestamped, and disclosed, and ideally it only narrows toward the original intent. For the irreducible residual of genuine novel gaps, name in advance who interprets and by what canon, so interpretation is a known procedure rather than an emergency. Serves C4. Failure prevented: Strategy (alleged post-close rule change).</span></li>
+  </ol>
+</section>
+
+<section id="process">
+  <h2>5. Process: controls around the words</h2>
+  <p>Good rules are not only well written, they are well governed. Three process controls do most of the work, and they correspond to the legal distinction between <strong>patent</strong> ambiguity (obvious on the face of the rule) and <strong>latent</strong> ambiguity (revealed only by events).</p>
+  <ul>
+    <li><strong>Pre-listing adversarial review</strong> kills patent ambiguity before a dollar is at stake. Before any market goes live, an internal "red team" bets, on paper, the most aggressive defensible reading of each side and tries to construct a state of the world where the rule is silent or two-faced. If they can, the rule is rewritten. This is the adversarial agreement test, run by people paid to break it.</li>
+    <li><strong>A residual authority with a published canon</strong> handles latent ambiguity. You cannot foresee everything, so name, in advance, who resolves a true novel gap and the interpretive rule they must follow (intent first, then <em>contra proferentem</em>, then void). The point is not to avoid discretion entirely, which is impossible, but to make discretion rare, bounded, and pre-announced rather than improvised under fire.</li>
+    <li><strong>Move objective markets off social voting entirely.</strong> Polymarket's own direction concedes the theory: its 2025 Chainlink integration routes asset-price markets to automated, timestamped feeds rather than a token vote, and the UMIP-189 whitelist restricts who can even propose. The logical end state is a sorting: price and data markets resolve by deterministic feed; certified-event markets resolve by named primary source; only the irreducibly contested remainder touches a human or token vote, and that remainder should be small and clearly labeled as such.</li>
+  </ul>
+</section>
+
+<section id="gauntlet">
+  <h2>6. The pre-listing gauntlet</h2>
+  <p>Compress everything above into a gate every proposed market must pass before listing. If it fails any step, it is rewritten or rejected.</p>
+  <ol class="canons">
+    <li><b>Referent screen.</b> Does the question bottom out in an institutionally certified, observable event? If it bottoms out in a contested social judgment, stop. Re-base it on a primitive or do not list it as a clean binary.</li>
+    <li><b>Definition pass.</b> Is every operative term reduced to observables with necessary-and-sufficient conditions? Underline each noun and verb; if any requires taste to apply, define it down to a primitive.</li>
+    <li><b>Source waterfall.</b> Is there exactly one primary source, an ordered fallback, and a default if all are silent? No co-equal sources.</li>
+    <li><b>Clock.</b> Occurrence or disclosure? Which zone? What instant? What grace window?</li>
+    <li><b>Edge enumeration.</b> Are cancellation, postponement, partial, retraction, tie, and impossibility each assigned an outcome?</li>
+    <li><b>Residual default.</b> Is there a no-discretion catch-all that defaults against the drafter?</li>
+    <li><b>Adversarial agreement test.</b> Could a neutral, given the full record, still side with either of two paid opponents? If yes, it has not passed.</li>
+  </ol>
+</section>
+
+<section id="limits">
+  <h2>7. What rules cannot fix</h2>
+  <div class="limit">
+    <h3>Honesty about the boundary</h3>
+    <p>Rigor includes admitting where the method stops. Three limits are real.</p>
+    <p><strong>Irreducibly subjective markets.</strong> Some questions are interesting precisely because they are contestable ("was this the greatest game ever?"). No definition makes them determinate. The honest options are to not list them, or to list them with a named human arbiter and an explicit notice that resolution is a judgment, not a fact. What you must not do is dress a judgment in the costume of an objective rule and feed it to a token vote.</p>
+    <p><strong>The letter-spirit residue.</strong> Even a well-chosen trigger can diverge from intent under a freak event. You can shrink this set with canon 4.3 (match trigger to intent) but you cannot empty it. For that residue you need the pre-registered interpretive authority, not a pretense that the residue does not exist.</p>
+    <p><strong>The specificity-tradeability tension.</strong> Hyper-specified rules can be gamed by technicality and can deter traders who do not want to read a prospectus. There is a real frontier between a rule so loose it disputes and a rule so tight it is unbearable or exploitable. The protocol does not abolish this tradeoff; it pushes the frontier outward by spending drafting effort so that users do not spend dispute effort. The right target is not zero words, it is zero <em>ambiguity</em> at the lowest word count that achieves it.</p>
+  </div>
+  <p>And one structural caution. Better rules reduce the <em>number</em> of disputes but do not, by themselves, fix a capturable oracle on the genuinely close residual. Clarity is necessary for capture-resistance and it is most of the battle, because it removes the cover that capture hides behind, but the resolver's own design (who can propose, how votes are weighted, whether voters can hold positions) is a separate lever. Rule-writing and oracle design are two hands of the same craft. This essay is about the first hand, with no illusion that it is the only one.</p>
+</section>
+
+<section id="rewrites">
+  <h2>8. Concrete rewrites of real markets</h2>
+  <p>Theory earns its keep on examples. Here are three real markets from the dispute database, each rewritten by the protocol. The "before" text is the rule as reported (verbatim quotes are drawn from secondary reporting and should be confirmed against the live page before reuse).</p>
+
+  <div class="rewrite">
+    <div class="head">Rewrite 1: the Zelenskyy "suit" market <span>(undefined key term plus a standard for a source)</span></div>
+    <div class="block before">
+      <div class="lab">Before, as reported</div>
+      <div class="rule">"This market will resolve to 'Yes' if Volodymyr Zelenskyy is photographed or videotaped wearing a suit between [dates] ET. Otherwise this market will resolve to 'No'. The resolution source will be a consensus of credible reporting."</div>
+      <p class="muted" style="margin-top:10px; margin-bottom:0; font-size:13px">Two defects. "Suit" is a contested aesthetic judgment (C2 fails). "Consensus of credible reporting" references the manipulable state of media opinion (C3 fails). Result: a 237 million dollar market flipped YES to NO over nine days and was branded a scam.</p>
+    </div>
+    <div class="block after">
+      <div class="lab">After</div>
+      <div class="rule">Resolution. This market resolves YES if and only if, within the window [start] to [end] (all times America/New York), there exists at least one authentic photograph or video, published by [Associated Press OR Getty Images editorial], in which Volodymyr Zelenskyy is shown wearing ALL of: (a) a tailored jacket and (b) trousers of matching fabric and color, (c) worn together as an outfit, (d) with a collared dress shirt. A necktie is not required. Athletic, military, or field clothing does not qualify.
+
+Source. The sole resolution source is the editorial archive of [AP / Getty]. A "consensus of credible reporting" is NOT a resolution source.
+
+Authenticity. Images that are AI-generated, materially edited, or undated are disregarded.
+
+Default. If no qualifying image exists in the source archive by [end], or if the only candidate images are not clearly compliant with (a) to (d), this market resolves NO. The burden is on YES; unclear cases resolve NO.</div>
+      <ul class="annot">
+        <li>"Suit" is reduced to four observable conditions a checker verifies without taste (C2).</li>
+        <li>One named archive replaces "consensus of credible reporting" (C3).</li>
+        <li>The clock, the authenticity edge case, and an explicit burden-of-proof default are stated (C1).</li>
+        <li>The default resolves NO against the drafter's ambiguity rather than escalating to a vote (C4, <em>contra proferentem</em>).</li>
+      </ul>
+      <p class="muted" style="font-size:13px; margin-bottom:0">Honest caveat: "matching fabric and color" still has a sliver of judgment. That residue is deliberately pushed onto the YES side and defaulted to NO, so the irreducible vagueness costs the drafter, not the oracle. If even this is too subjective for comfort, the protocol's prior question applies: a fashion call may simply not belong in a binary objective market.</p>
+    </div>
+  </div>
+
+  <div class="rewrite">
+    <div class="head">Rewrite 2: the Strategy "sold any Bitcoin by May 31" market <span>(occurrence vs disclosure timing, plus retroactive rules)</span></div>
+    <div class="block before">
+      <div class="lab">Before, in effect</div>
+      <div class="rule">"Resolves YES if Strategy sells any bitcoin by May 31, 2026 [11:59 PM ET]. Resolution by SEC filings, on-chain data, and credible reporting."</div>
+      <p class="muted" style="margin-top:10px; margin-bottom:0; font-size:13px">The company sold 32 BTC before May 31 but disclosed it in an 8-K on June 1. The rule never said whether the trigger was the sale or its disclosure, and a post-close interpretation that disclosure must precede the deadline drove a contested NO. Three co-equal sources (filings, on-chain, reporting) can also disagree.</p>
+    </div>
+    <div class="block after">
+      <div class="lab">After</div>
+      <div class="rule">Trigger. This market resolves YES if Strategy (MSTR) executes one or more sales of bitcoin with a trade date on or before May 31, 2026, 23:59:59 America/New York, as evidenced by an SEC filing or an official MSTR disclosure.
+
+Disclosure grace window. Evidence published on or before June 15, 2026 counts, provided the disclosed trade date falls on or before May 31. Disclosures first published after June 15 are disregarded, and the market resolves NO.
+
+Source waterfall. (1) MSTR's SEC filings (EDGAR). (2) If EDGAR is silent, an official MSTR press release or 8-K equivalent. (3) On-chain data and reporting are explanatory only and are never the resolution source.
+
+Default. If no qualifying sale with an on-or-before-May-31 trade date is evidenced by the grace date, resolves NO.</div>
+      <ul class="annot">
+        <li>The trigger is the trade date (occurrence), stated to the second and zone (C2).</li>
+        <li>A bounded disclosure grace window reconciles the real world (filings lag trades) with a closeable market, so a one-day-late 8-K still counts (C1, canon 4.3).</li>
+        <li>One primary source (EDGAR) with an ordered fallback, demoting "credible reporting" to context (C3).</li>
+        <li>Because the trigger and the question's intent (did Strategy reduce holdings in May?) are now the same object, there is nothing left for a post-close reinterpretation to exploit (C4).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rewrite">
+    <div class="head">Rewrite 3: the "Israel x Hezbollah ceasefire" market <span>(entity-scope ambiguity)</span></div>
+    <div class="block before">
+      <div class="lab">Before, as reported</div>
+      <div class="rule">"Resolves YES if Israel and Hezbollah both officially announce an armistice or ceasefire effective by Dec 31, 2024, declared through official channels by both parties."</div>
+      <p class="muted" style="margin-top:10px; margin-bottom:0; font-size:13px">The actual ceasefire was signed by Israel and the government of Lebanon, not nominally by "Hezbollah." A literal reading said NO; the intent (has the Israel-Hezbollah fighting stopped?) said YES. About 87 percent of UMA voters ruled YES, and the loser had a textually defensible case. The bug is the proper noun, not the verb.</p>
+    </div>
+    <div class="block after">
+      <div class="lab">After</div>
+      <div class="rule">Qualifying agreement. This market resolves YES if, on or before Dec 31, 2024, 23:59:59 America/New York, a formal agreement to cease hostilities takes effect between Israel on one side and, on the other, any of: Hezbollah, the government of Lebanon, or a party signing on behalf of either, where the agreement is by its terms intended to halt armed conflict between Israel and Hezbollah.
+
+Intent control. The named party is not dispositive; an agreement that ends Israel-Hezbollah combat qualifies even if signed by the Lebanese state, because the question concerns the conflict, not the signatory's name.
+
+Source waterfall. (1) The published text of the agreement via [US State Department OR the parties' official channels]. (2) If absent, the consensus of [Reuters, AP, AFP]. (3) If those conflict, NO.
+
+Default. A unilateral pause, a humanitarian truce under 14 days, or an agreement not in effect by the cutoff resolves NO.</div>
+      <ul class="annot">
+        <li>The entity set is defined to match the question's intent, the war, rather than a single proper noun (C2, canon 4.3).</li>
+        <li>An explicit intent-control clause tells the resolver that signatory identity is not the trigger (C2).</li>
+        <li>A named source waterfall replaces "officially announce" (C3), and edge cases (unilateral, short humanitarian, not-yet-effective) are pre-resolved (C1).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="skeleton">
+  <h2>9. A reusable rule skeleton</h2>
+  <p>The protocol is portable. Any market can be drafted by filling this template, in this order. If a field cannot be completed, the market is not ready to list.</p>
+  <div class="rule">QUESTION:        [one sentence; must precis the TRIGGER, not exceed it]
+
+TRIGGER:         This market resolves YES if and only if [necessary-and-
+                 sufficient conditions, each term reduced to an observable].
+
+DEFINITIONS:     [term] means [conditions terminating in an observable primitive].
+                 [repeat for every operative term]
+
+CLOCK:           Trigger is [occurrence | disclosure].
+                 Time zone [IANA zone]. Cutoff [date, HH:MM:SS].
+                 Disclosure grace window: [bounded date], else NO.
+
+SOURCE WATERFALL: (1) [single primary source].
+                  (2) if silent, [named fallback].
+                  (3) if conflicting, [default].
+
+EDGE CASES:      Cancellation -> [outcome]. Postponement past cutoff -> [outcome].
+                 Partial -> [outcome]. Retraction -> [outcome]. Tie -> [outcome].
+                 Referent impossible -> [VOID + refund | NO].
+
+RESIDUAL:        If unaddressed, resolves [NO | VOID]; latent ambiguity is
+                 resolved against the drafter (contra proferentem).
+
+GOVERNANCE:      Rule frozen at open. Changes are new timestamped versions that
+                 only narrow toward intent. Novel gaps resolved by [named
+                 authority] under [intent -> contra proferentem -> void].</div>
+  <p class="muted" style="font-size:13.5px">Run the result through the section 6 gauntlet, finishing with the adversarial agreement test. A market that survives that test does not need a judge, which is the entire goal: not a better court, but fewer cases.</p>
+</section>
+
+<hr>
+
+<section id="close">
+  <h2>10. Closing principle</h2>
+  <blockquote class="thesis">Write the rule so that the truth is the only Schelling point. Choose facts the world certifies, not judgments the world contests. Define every term down to something a stranger can see. Name one source, fix one clock, pre-decide every edge, and when you reach the limit of foresight, make the unforeseen resolve against you, not against your users. A market drafted this way settles itself, and the oracle, that rare and capturable thing, is left with almost nothing to do. That is the goal of rule-writing: not to win disputes, but to make them impossible to start.</blockquote>
+</section>
+
+<footer>
+  Companion to a sourced database of fourteen Polymarket resolution disputes (2024 to mid-2026). The framework (Four C's, the seven canons, the gauntlet, the skeleton) is original analysis; the cited disputes and figures are drawn from that database and should be verified against primary sources before publication. Theoretical anchors referenced: Kaplow on rules versus standards; the incomplete-contracts tradition (Grossman, Hart, Moore); Schelling on focal points; and the drafting doctrines of contra proferentem, conditions precedent, and force majeure.
+</footer>
+
+</div>
+</body>
+</html>
