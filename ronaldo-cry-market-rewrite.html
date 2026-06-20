@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewriting a Real Market: Will Ronaldo Cry at the World Cup?</title>
+<style>
+  :root{
+    --bg:#fff1e5;            /* FT salmon */
+    --card:#fffaf4;
+    --card2:#fdf3ea;
+    --ink:#262320;
+    --muted:#6b635a;
+    --line:#e7d8c9;
+    --line2:#efe3d6;
+    --claret:#990f3d;       /* FT claret */
+    --teal:#0d7680;         /* FT teal */
+    --bad:#b3261e;
+    --good:#1a7f5a;
+    --code:#fbf3ea;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font:17px/1.7 Georgia,"Times New Roman","PT Serif",serif;
+    -webkit-font-smoothing:antialiased;}
+  .sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:740px; margin:0 auto; padding:54px 24px 110px}
+  header.top{border-bottom:2px solid var(--ink); padding-bottom:24px; margin-bottom:10px}
+  .kicker{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--claret); font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase}
+  h1{font-size:35px; line-height:1.16; margin:12px 0 14px; letter-spacing:-.01em; font-weight:700}
+  .standfirst{color:#473f37; font-size:19px; line-height:1.55}
+  .byline{margin-top:16px; color:var(--muted); font-size:13.5px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  h2{font-size:25px; margin:44px 0 12px; letter-spacing:-.01em; font-weight:700}
+  h3{font-size:19px; margin:26px 0 8px}
+  p{margin:0 0 16px}
+  a{color:var(--claret); text-decoration:none; border-bottom:1px solid rgba(153,15,61,.3)} a:hover{border-bottom-color:var(--claret)}
+  .muted{color:var(--muted)}
+  strong{font-weight:700}
+  .meta{display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 6px}
+  .pill{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-size:12.5px; color:#534b42}
+  .pill b{color:var(--ink)}
+  blockquote.thesis{margin:26px 0; padding:16px 22px; border-left:3px solid var(--claret);
+    background:var(--card); border-radius:6px; font-size:19px; line-height:1.5; font-style:italic; color:#36302a}
+  .note{background:var(--card); border:1px solid var(--line); border-left:3px solid var(--teal);
+    border-radius:8px; padding:14px 18px; margin:20px 0; font-size:14.5px}
+  table{width:100%; border-collapse:collapse; margin:16px 0; font-size:14px; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden}
+  th,td{padding:10px 13px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line2)}
+  th{background:var(--card2); color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  td .c{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-weight:700; color:var(--claret); font-size:12px}
+  .rewrite{border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:22px 0; background:var(--card)}
+  .rewrite .head{padding:12px 18px; background:var(--card2); border-bottom:1px solid var(--line); font-weight:700; font-size:15.5px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .block{padding:16px 18px}
+  .block.before{border-left:3px solid var(--bad)}
+  .block.after{border-left:3px solid var(--good); border-top:1px solid var(--line)}
+  .lab{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:9px}
+  .before .lab{color:var(--bad)} .after .lab{color:var(--good)}
+  .rule{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:12.5px; line-height:1.65;
+    background:var(--code); border:1px solid var(--line); border-radius:8px; padding:13px 15px; color:#322c26; white-space:pre-wrap}
+  ul.annot{list-style:none; padding:0; margin:13px 0 2px}
+  ul.annot li{position:relative; padding-left:24px; margin:8px 0; font-size:14px; color:#4a423a;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  ul.annot li::before{content:"\2192"; position:absolute; left:0; color:var(--good); font-weight:800}
+  ul.diag{list-style:none; padding:0; margin:14px 0}
+  ul.diag li{background:var(--card); border:1px solid var(--line); border-radius:9px; padding:13px 16px; margin:10px 0; font-size:15px}
+  ul.diag .tag{display:inline-block; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#fff; background:var(--claret);
+    border-radius:5px; padding:2px 7px; margin-right:8px; vertical-align:1px}
+  ul.diag .tag.c1{background:#8a5a00} ul.diag .tag.c2{background:var(--claret)} ul.diag .tag.c3{background:var(--teal)} ul.diag .tag.c4{background:#5a3b8a}
+  .limit{background:var(--card2); border:1px solid var(--line); border-left:3px solid #8a5a00; border-radius:8px; padding:16px 18px; margin:22px 0}
+  .limit h3{margin-top:0; color:#8a5a00}
+  hr{border:none; border-top:1px solid var(--line); margin:40px 0}
+  footer{margin-top:50px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  @media (max-width:600px){ h1{font-size:28px} .wrap{padding:34px 18px 80px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Rule-Writing Clinic &middot; A Worked Example</div>
+  <h1>Will Ronaldo cry at the World Cup? A market that cannot resolve itself, and how to fix it</h1>
+  <p class="standfirst">This novelty market is a textbook specimen. Its question points at an emotion, not a certified fact, and its rule asks a conflicted crowd to judge tears from grainy footage. Here is the diagnosis and a full rewrite, built on the same Four C's framework used for the dispute database.</p>
+  <div class="byline">Worked rewrite. The "before" rule is quoted from the Polymarket listing and secondary trackers (direct fetch was blocked, so confirm verbatim on the live page). No em dashes by design.</div>
+</header>
+
+<section id="context">
+  <h2>1. The market, as it stands</h2>
+  <div class="meta">
+    <span class="pill"><b>Market:</b> Will Ronaldo Cry at the World Cup?</span>
+    <span class="pill"><b>Launched:</b> ~5 Jun 2026</span>
+    <span class="pill"><b>Window:</b> 2026 World Cup, 11 Jun to 19 Jul</span>
+    <span class="pill"><b>Price:</b> ~64 to 69% YES</span>
+    <span class="pill"><b>Volume:</b> ~$150K</span>
+  </div>
+  <div class="rewrite">
+    <div class="head">The rule as reported</div>
+    <div class="block before">
+      <div class="lab">Before</div>
+      <div class="rule">Resolves YES if Cristiano Ronaldo visibly sheds tears that can be clearly
+observed on his face in any photograph or video during a 2026 FIFA World
+Cup match for Portugal.
+
+The crying must occur while Ronaldo is on the field or the bench area;
+crying in the locker room or other areas will not count. This can occur
+before, during, or after the match.
+
+The images or video must be authentic. Archival material, previously
+recorded footage, reused images, digitally altered content, AI-generated
+media, or staged reproductions will not qualify.
+
+The primary resolution source for this market will be credible video or
+photographic evidence.</div>
+    </div>
+  </div>
+  <p>It reads reasonable. It is not. Run it through the four properties a rule needs to settle without a judge (Complete, Clear, Checkable, Capture-resistant) and it fails three of them, for the same structural reasons the Zelenskyy "suit" market failed, only worse, because a tear is more contestable than a jacket.</p>
+</section>
+
+<section id="diagnosis">
+  <h2>2. Diagnosis: where the function breaks</h2>
+  <p>Recall the test: a rule is a function from the state of the world to a payout, and a dispute is that function being undefined, non-deterministic, unverifiable, or capturable. This market trips every wire except totality of the headline.</p>
+
+  <ul class="diag">
+    <li><span class="tag c2">Clear</span><strong>"Crying" is an undefined, perceptual judgment.</strong> Is a single welling tear that never falls "crying"? Are glassy eyes? What about tears from sweat on a soaked face, rain, an eye poke, a finger in the eye at a corner, or a yawn? The rule says "visibly sheds tears," but the whole contest will be over footage where reasonable people see different things. There is no observable bright line.</li>
+    <li><span class="tag c2">Clear</span><strong>"On the field or the bench area" and "before, during, or after" are loose.</strong> Does the technical area count? The tunnel mouth? The pitch during the anthem? On-pitch interviews after the final whistle? And "after the match" has no time bound, so an emotional moment an hour later, or at a ceremony, is arguably in or out.</li>
+    <li><span class="tag c3">Checkable</span><strong>"Credible video or photographic evidence" is a standard, not a source.</strong> This is the same family as "consensus of credible reporting," the single most dispute-prone phrase in the dataset. No archive is named, so whoever adjudicates decides both what the footage shows and whether it is "credible." That is precisely the surface a token-vote capture exploits.</li>
+    <li><span class="tag c1">Complete</span><strong>Edge cases are unassigned.</strong> What if Ronaldo is not in a single Portugal matchday squad? What if Portugal is eliminated in the group stage and the market sits open until July with no possible qualifying moment? What if the tears are plainly from a physical cause? None of these has a pre-committed outcome.</li>
+    <li><span class="tag c4">Capture</span><strong>Subjectivity is the capture vector.</strong> Because "cry" and "credible" both require judgment, a motivated holder can argue glassy eyes up to YES, or argue clear tears down to "not clearly shed." Vagueness is what lets the largest wallet, rather than the truth, become the focal point.</li>
+  </ul>
+
+  <blockquote class="thesis">The deeper problem is the referent. "Did Ronaldo cry" is not a fact the world certifies; it is a perception. No wording makes a perception determinate, because the disagreement lives in the footage, not in the sentence. So the rewrite cannot aim for an objective fact. It can only shrink the judgment to the smallest possible observable, put the burden on YES, and name who decides.</blockquote>
+</section>
+
+<section id="rewrite">
+  <h2>3. The rewrite</h2>
+  <p>The goal is not a perfect objective rule, which is impossible here, but a rule that converts "did he cry" into a near-mechanical check, bounds every edge, names one source, and resolves its own residue against the side that benefits from vagueness.</p>
+
+  <div class="rewrite">
+    <div class="head">After, applying the protocol</div>
+    <div class="block after">
+      <div class="lab">After</div>
+      <div class="rule">QUESTION
+Will Cristiano Ronaldo shed a tear pitchside at the 2026 FIFA World Cup?
+
+TRIGGER
+This market resolves YES if and only if, within a Qualifying Window
+(defined below), there exists Qualifying Footage showing at least one
+tear visibly leaving Cristiano Ronaldo's eye and tracking down his
+cheek. Eyes that merely redden, glisten, or well up without a tear
+falling do NOT qualify.
+
+EXCLUSIONS (non-emotional cause)
+A tear does NOT count if the footage makes its cause plainly physical:
+direct contact to the eye, a foreign substance, visible heavy rain, or
+sweat running from the brow into the eye. Tears of joy and tears of
+sadness both count; the market does not require proof of emotion, only
+a falling tear not plainly caused by the above.
+
+QUALIFYING LOCATION
+On the field of play, in the team's technical area or substitutes'
+bench, or on the pitch during the walkout, anthems, or post-match
+period. Locker room, tunnel interior, press-conference room, stands,
+hotel, and training ground do NOT qualify.
+
+QUALIFYING WINDOW
+For each 2026 World Cup match in which Ronaldo is named in Portugal's
+matchday squad: from his walkout onto the pitch until 30 minutes after
+that match's final whistle (including any on-pitch ceremony). The
+market's overall window runs from Portugal's first match to the end of
+Portugal's final match of the tournament (their elimination match, or
+the Final), or 19 Jul 2026 23:59 America/New_York, whichever is earlier.
+
+SOURCE WATERFALL
+(1) The official FIFA host-broadcaster match feed and licensed Getty
+    Images editorial photography.
+(2) If (1) is silent, a clear instance shown by at least two of
+    Reuters, AP, AFP, Getty.
+(3) If sources conflict or footage is not clear enough for a neutral
+    observer to confirm a tear left the eye and tracked the cheek: NO.
+
+AUTHENTICITY
+Only live, dated match-day media from the sources above. Archival,
+reused, edited, AI-generated, or staged media is disregarded.
+
+DEFAULT (burden on YES)
+If no Qualifying Footage clearly satisfies the Trigger by the end of
+the window, this market resolves NO. The burden of proof is on YES;
+any case that is not clear resolves NO.
+
+GOVERNANCE
+Rule frozen at open. Any clarification is a timestamped new version that
+only narrows toward this intent. A genuinely novel gap is decided by
+[named reviewer] under: intent first, then against the drafter, then NO.</div>
+      <ul class="annot">
+        <li><b>Clear (C2):</b> "Crying" becomes one observable, a tear leaving the eye and tracking the cheek, with a bright line that excludes glassy or welling eyes. The hardest residue (sweat, rain, eye contact) is handled by a narrow, footage-visible exclusion rather than by mind-reading the emotion.</li>
+        <li><b>Clear (C2):</b> Location and timing are enumerated to the technical area and a 30-minute post-match bound, killing the "bench area" and open-ended "after" vagueness.</li>
+        <li><b>Checkable (C3):</b> "Credible evidence" is replaced by a named source waterfall (host feed and Getty, then two of four wires, then NO), removing the adjudicator's discretion over what counts as credible.</li>
+        <li><b>Complete (C1):</b> The window self-terminates at Portugal's last match, so an early exit resolves NO promptly instead of leaving the market dangling; the not-in-squad and physical-cause cases are pre-decided.</li>
+        <li><b>Capture-resistant (C4):</b> With the judgment shrunk to a falling tear from a named feed and the burden on YES, there is little room for a motivated voter to manufacture a focal point other than the truth. Frozen versioning blocks a post-hoc reinterpretation.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="limits">
+  <h2>4. Honest caveat: what this still cannot do</h2>
+  <div class="limit">
+    <h3>A tear is still a perception</h3>
+    <p>Even after all this, whether a single bead on a sweaty face is "a tear leaving the eye" can be contestable on bad footage. The rewrite does not pretend to abolish that residue. It does three honest things with it: it makes the residue as small as an observable can be, it assigns the residue to the YES side so that unclear footage resolves NO, and it names a single human reviewer rather than a token vote for the rare genuine gap. That is the correct posture for a novelty market whose referent is inherently perceptual.</p>
+    <p>The framework's prior question still applies, and a serious platform should ask it: a market about a famous person's tears is entertainment, and if you are unwilling to attach a named reviewer and an explicit burden of proof, the alternative is not a vaguer rule, it is not listing the market as a clean binary at all. The mistake to avoid is the original's mistake, dressing a perception in the language of objective fact and then handing it to a crowd to vote on.</p>
+  </div>
+</section>
+
+<hr>
+
+<blockquote class="thesis">Choose facts the world certifies; this market chose a feeling. Since you cannot un-choose it once it is listed, do the next best thing: define the feeling down to a single falling tear, point at one camera, bound the clock and the touchline, and make every blurry frame resolve against the house. A market written this way still settles itself, even when the question is whether a man cried.</blockquote>
+
+<footer>
+  Companion to "Writing Prediction-Market Rules That Don't Need a Judge" and the fourteen-case Polymarket dispute database. The "before" rule is quoted from the Polymarket event listing and secondary trackers; direct page fetch returned HTTP 403, so confirm the verbatim text and exact window dates against the live market before relying on them. Bracketed fields, such as the named reviewer, are placeholders the platform would fill.
+</footer>
+
+</div>
+</body>
+</html>
