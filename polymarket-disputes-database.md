@@ -8,17 +8,17 @@ This database includes only disputes that could be corroborated across real, nam
 
 Two limitations you must know before citing any of this in print:
 
-1. Page-fetch was blocked. The research tooling could load search-engine result summaries (which quote and extract text from the listed outlets), but direct full-page fetch returned HTTP 403 across essentially every domain this session (Polymarket, UMA, WSJ, The Block, CoinDesk, The Defiant, Decrypt, Wikipedia, LessWrong). Consequence: every verbatim resolution-criteria quote and every exact UMA vote tally below comes from outlet text reproduced in search summaries, cross-checked across multiple independent outlets, not from a live page loaded character by character. Before publication, re-pull the exact rules text from each Polymarket event page and the exact vote splits from the UMA oracle Data Verification Mechanism (DVM) record.
+1. Page-fetch was blocked. The research tooling could load search-engine result summaries (which quote and extract text from the listed outlets), but direct full-page fetch returned HTTP 403 across essentially every domain this session (Polymarket, UMA, WSJ, The Block, CoinDesk, The Defiant, Decrypt, Wikipedia, LessWrong, GitBook). Consequence: every verbatim resolution-criteria quote and every exact UMA vote tally below comes from outlet text reproduced in search summaries, cross-checked across multiple independent outlets, not from a live page loaded character by character. Before publication, re-pull the exact rules text from each Polymarket event page and the exact vote splits from the UMA oracle Data Verification Mechanism (DVM) record.
 
-2. Highest-value primary sources not yet read in full. Two sources almost certainly contain a larger, more precise case inventory and should be opened directly: the LessWrong post "Ambiguity in Prediction Market Resolution is Still Harmful," and an arXiv paper, "Can LLMs Help Decentralized Dispute Arbitration? A Case Study of UMA-Resolved Markets on Polymarket" (arxiv.org/abs/2604.15674). Both were inaccessible this session.
+2. Highest-value primary sources not fully read. Two sources almost certainly contain a larger, more precise case inventory and should be opened directly: the LessWrong post "Ambiguity in Prediction Market Resolution is Still Harmful," and an arXiv paper, "Can LLMs Help Decentralized Dispute Arbitration? A Case Study of UMA-Resolved Markets on Polymarket" (arxiv.org/abs/2604.15674). Both were inaccessible to direct fetch this session.
 
-Coverage is therefore partial but solid: ten individually sourced disputes plus a verified structural layer. This is a starting spine, not a claimed-complete census. A fuller census requires the UMA DVM voting log and Polymarket's disputed-markets list, neither of which could be enumerated here.
+Coverage: thirteen individually sourced disputes plus a verified structural/governance layer. This is a strong evidentiary spine, not a claimed-complete census. A fuller census requires enumerating the UMA DVM voting log and Polymarket's disputed-markets list, neither of which could be loaded directly here. A batching plan to extend the dataset is at the end.
 
 ## How resolution and disputes work (context for the table)
 
-Polymarket outsources resolution to UMA's Optimistic Oracle. A whitelisted proposer posts an outcome with a bond (reported at about 750 USDC.e). There is a short challenge window (about 2 hours). A disputer must match the bond. A disputed assertion escalates to UMA's Data Verification Mechanism, where UMA token stakers vote through a commit-and-reveal cycle, typically resolving in roughly 48 to 96 hours. Voters in the majority earn rewards; dissenters lose a small fraction of staked UMA. This token-weighted vote is the mechanism at the center of most disputes below.
+Polymarket outsources resolution to UMA's Optimistic Oracle. A whitelisted proposer posts an outcome with a bond (reported at about 750 USDC.e). There is a short challenge window (about 2 hours). A disputer must match the bond. A disputed assertion escalates to UMA's Data Verification Mechanism, where UMA token stakers vote through a commit-and-reveal cycle, typically resolving in roughly 48 to 96 hours. If no proposal reaches the consensus threshold, the vote can "roll" and voters get another window to discuss and revote. Voters in the majority earn rewards; dissenters lose a small fraction of staked UMA. This token-weighted vote is the mechanism at the center of most disputes below.
 
-Sources for mechanics: UMA docs (docs.uma.xyz/faqs); startpolymarket.com/learn/how-markets-resolve; chainup.com/blog/settling-the-wagers-inside-polymarkets-decentralized-oracle-and-resolution-engine.
+Sources for mechanics: UMA docs (docs.uma.xyz/faqs); Polymarket help center (help.polymarket.com/en/articles/13364551-how-are-markets-disputed); startpolymarket.com/learn/how-markets-resolve.
 
 ## Ordering choice
 
@@ -28,34 +28,23 @@ The table is ordered chronologically rather than by category. Reason: the most i
 
 | # | Date | Market (short) | Category | Final resolution | Who decided | Seen as correct? | Root-cause tag |
 |---|------|----------------|----------|------------------|-------------|------------------|----------------|
-| 1 | Jul to Aug 2024 | Venezuela 2024 presidential election (Maduro vs Gonzalez) | Election | Gonzalez (Maduro sub-market to No/zero) | UMA token vote | Contested on process | Conflicting resolution sources (official vs credible reporting) |
-| 2 | Jun 2024 | Barron Trump involved in creating $DJT token? | Current events / crypto | UMA voted No; Polymarket called it wrong, refunded Yes | UMA voted, Polymarket overrode in spirit | Contested | Platform-vs-oracle conflict over evidence standard |
-| 3 | Jan 2025 | TikTok banned in the US before May 2025? | Current events | Yes | Polymarket/UMA process | Contested | Literal wording vs real-world enforcement |
-| 4 | Mar 2025 | Ukraine agrees to Trump mineral deal before April? | Geopolitics | Yes (premature) | UMA token vote (whale) | Widely seen as wrong | Oracle governance attack (whale voting) |
-| 5 | Jun to Jul 2025 | Will Zelenskyy wear a suit before July? | Current events | No | UMA token vote | Heavily contested | Subjective/ambiguous criteria + token voting |
-| 6 | Dec 2025 | Trump declassifies UFO files in 2025? | Current events / politics | Yes (no documents clearly released) | UMA token vote (whales) | Strongly contested | Undefined key term ("declassify") + whale capture |
-| 7 | Mar 2026 | Who will Trump talk to in March? (Trump-Xi call) | Current events | No (on Trump-Xi) | UMA voters pushed Yes; Polymarket overrode | Outcome seen as correct, process not | Oracle capture vs unverified principal claim |
-| 8 | Feb 2026 | Cardi B performs at Super Bowl LX halftime? | Sports / prop | Yes (Polymarket); Kalshi settled differently | Polymarket discretion | Contested | Undefined key term ("perform") |
-| 9 | May to Jun 2026 | Strategy (MicroStrategy) sold any Bitcoin by May 31? | Crypto / corporate action | No for May, Yes for June | UMA token vote (98.6%) | Heavily contested | Occurrence-date vs disclosure-date + alleged retroactive rules |
-| 10 | Jun 2026 | US x Iran permanent peace deal by deadline? | Geopolitics / war | Yes | Polymarket/UMA process | Contested on merits | Ambiguous threshold ("permanent" vs interim ceasefire) |
+| 1 | Jun 2024 | Barron Trump involved in creating $DJT token? | Current events / crypto | UMA voted No; Polymarket called it wrong, refunded Yes | UMA voted, Polymarket overrode | Contested | Platform-vs-oracle conflict over evidence standard |
+| 2 | Jul to Aug 2024 | Venezuela 2024 presidential election (Maduro vs Gonzalez) | Election | Gonzalez (Maduro sub-market to zero) | UMA token vote | Contested on process | Conflicting resolution sources (official vs credible reporting) |
+| 3 | Nov 2024 | Israel x Hezbollah ceasefire in 2024? | Geopolitics | Yes (ceasefire applied) | UMA token vote (about 87%) | Heavily contested | Entity-scope ambiguity (Hezbollah vs Lebanese government) |
+| 4 | Jan 2025 | TikTok banned in the US before May 2025? | Current events | Yes | Polymarket/UMA process | Contested | Literal wording vs real-world enforcement |
+| 5 | Mar 2025 | Gold missing from Fort Knox? | Geopolitics / US govt | No | UMA token vote (whale-capture alleged) | Strongly contested | Oracle manipulation / whale voting |
+| 6 | Mar 2025 | Ukraine agrees to Trump mineral deal before April? | Geopolitics | Yes (premature) | UMA token vote (whale) | Widely seen as wrong | Oracle governance attack (whale voting) |
+| 7 | Jun to Jul 2025 | Will Zelenskyy wear a suit before July? | Current events | No | UMA token vote | Heavily contested | Subjective/ambiguous criteria + token voting |
+| 8 | Jul 2025 | Thailand strikes Cambodia by [date]? | Geopolitics / war | Yes (95.89% after rolled vote) | UMA token vote (rolled) | Outcome correct, process contested | Timing criterion ("Too Early") + whale distortion |
+| 9 | Dec 2025 | Trump declassifies UFO files in 2025? | Current events / politics | Yes (no documents clearly released) | UMA token vote (whales) | Strongly contested | Undefined key term ("declassify") + whale capture |
+| 10 | Feb 2026 | Cardi B performs at Super Bowl LX halftime? | Sports / prop | Yes (Polymarket); Kalshi settled differently | Polymarket discretion | Contested | Undefined key term ("perform") |
+| 11 | Mar 2026 | Who will Trump talk to in March? (Trump-Xi call) | Current events | No (on Trump-Xi) | UMA voters pushed Yes; Polymarket overrode | Outcome correct, process contested | Oracle capture vs unverified principal claim |
+| 12 | May to Jun 2026 | Strategy (MicroStrategy) sold any Bitcoin by May 31? | Crypto / corporate action | No for May, Yes for June | UMA token vote (98.6%) | Heavily contested | Occurrence-date vs disclosure-date + alleged retroactive rules |
+| 13 | Jun 2026 | US x Iran permanent peace deal by deadline? | Geopolitics / war | Yes | Polymarket/UMA process | Contested on merits | Ambiguous threshold ("permanent" vs interim ceasefire) |
 
 ## Detailed entries
 
-### 1. Venezuela 2024 presidential election (Maduro vs Gonzalez)
-
-- Market title and URL: Event "Venezuela Presidential Election Winner" with candidate sub-markets including "Will Nicolas Maduro win the 2024 Venezuela presidential election?" and "Will Edmundo Gonzalez win the 2024 Venezuela presidential election?" Event: polymarket.com/event/venezuela-election-winner.
-- Category: Election.
-- Resolution / dispute date: Election July 28, 2024. CNE declared Maduro shortly after (Maduro odds surged to about 95%). UMA flipped to Gonzalez around August 5 to 6, 2024.
-- Resolution criteria as written (reported): "The primary resolution source for this market will be official information from Venezuela, however a consensus of credible reporting will also suffice." A reported December 31, 2024 fallback-to-No clause is from a single extraction and is UNVERIFIED.
-- What it intended to ask: Who would be the recognized winner of the 2024 Venezuelan presidential election.
-- Source of dispute: The two clauses pointed opposite ways. The "primary" source (Venezuela's CNE) declared Maduro at about 51.2 percent. The "credible reporting" fallback pointed to Gonzalez (Edison Research exit poll roughly 65 to 31; opposition published about 24,000 voting receipts showing a large Gonzalez win; many governments recognized Gonzalez).
-- How contested: Resolution escalated to UMA token-holder voting. Exact dispute-round count, bonds, and tallies are UNVERIFIED (UMA oracle page not loadable).
-- Final resolution and who decided: Resolved for Gonzalez (Maduro sub-market to zero). Per rekt.news, "On August 5, UMA dropped its bombshell. Gonzalez was declared the winner by the UMA community." Decided by UMA token holders, against the market's own stated primary source.
-- Seen as correct or contested: Strongly contested on process grounds. Critics (Frank Muci, "Polymarket Settles Bet Against its Own Rules"; LessWrong) argued UMA resolved against the written rules. Defenders noted Maduro's official win was almost certainly fraudulent. So arguably the correct real-world outcome reached by violating the stated rule hierarchy.
-- Root-cause tag: Conflict between a market's two named resolution sources, resolved by UMA discretion against the stated primary source.
-- Sources: rekt.news/hedging-bets; lesswrong.com/posts/d4YjM6RWEoT3rBEHe/ambiguity-in-prediction-market-resolution-is-still-harmful; frankmuci.substack.com/p/polymarket-settles-bet-against-its; blog.overlap.fi/polymarket-and-the-venezuela-election-another-case-of-dispute-resolution-gone-wrong; polymarket.com/event/venezuela-election-winner.
-
-### 2. Barron Trump involvement in $DJT Solana token
+### 1. Barron Trump involvement in $DJT Solana token
 
 - Market title and URL: Whether Barron Trump was involved in creating the Solana token $DJT. Exact slug not isolated.
 - Category: Current events / crypto.
@@ -69,7 +58,35 @@ The table is ordered chronologically rather than by category. Reason: the most i
 - Root-cause tag: Platform-versus-oracle conflict over a soft evidence standard ("preponderance of evidence").
 - Sources: theblock.co/post/302171/polymarket-contradicts-umas-resolution-on-barron-trumps-involvement-with-djt-token; dlnews.com/articles/defi/polymarket-slams-vote-on-barron-trump-and-djt-token; finance.yahoo.com/news/polymarket-contradicts-oracle-rarity-prediction-022105806.html.
 
-### 3. TikTok banned in the US before May 2025
+### 2. Venezuela 2024 presidential election (Maduro vs Gonzalez)
+
+- Market title and URL: Event "Venezuela Presidential Election Winner" with candidate sub-markets including "Will Nicolas Maduro win the 2024 Venezuela presidential election?" and "Will Edmundo Gonzalez win the 2024 Venezuela presidential election?" Event: polymarket.com/event/venezuela-election-winner.
+- Category: Election.
+- Resolution / dispute date: Election July 28, 2024. CNE declared Maduro shortly after (Maduro odds surged to about 95%). UMA flipped to Gonzalez around August 5 to 6, 2024.
+- Resolution criteria as written (reported): "The primary resolution source for this market will be official information from Venezuela, however a consensus of credible reporting will also suffice." A reported December 31, 2024 fallback-to-No clause is from a single extraction and is UNVERIFIED.
+- What it intended to ask: Who would be the recognized winner of the 2024 Venezuelan presidential election.
+- Source of dispute: The two clauses pointed opposite ways. The "primary" source (Venezuela's CNE) declared Maduro at about 51.2 percent. The "credible reporting" fallback pointed to Gonzalez (Edison Research exit poll roughly 65 to 31; opposition published about 24,000 voting receipts showing a large Gonzalez win; many governments recognized Gonzalez).
+- How contested: Resolution escalated to UMA token-holder voting. Exact dispute-round count, bonds, and tallies are UNVERIFIED (UMA oracle page not loadable).
+- Final resolution and who decided: Resolved for Gonzalez (Maduro sub-market to zero). Per rekt.news, "On August 5, UMA dropped its bombshell. Gonzalez was declared the winner by the UMA community." Decided by UMA token holders, against the market's own stated primary source.
+- Seen as correct or contested: Strongly contested on process grounds. Critics (Frank Muci, "Polymarket Settles Bet Against its Own Rules"; LessWrong) argued UMA resolved against the written rules. Defenders noted Maduro's official win was almost certainly fraudulent. So arguably the correct real-world outcome reached by violating the stated rule hierarchy.
+- Root-cause tag: Conflict between a market's two named resolution sources, resolved by UMA discretion against the stated primary source.
+- Sources: rekt.news/hedging-bets; lesswrong.com/posts/d4YjM6RWEoT3rBEHe/ambiguity-in-prediction-market-resolution-is-still-harmful; frankmuci.substack.com/p/polymarket-settles-bet-against-its; blog.overlap.fi/polymarket-and-the-venezuela-election-another-case-of-dispute-resolution-gone-wrong; polymarket.com/event/venezuela-election-winner.
+
+### 3. Israel x Hezbollah ceasefire in 2024?
+
+- Market title and URL: "Israel x Hezbollah Ceasefire in 2024?" polymarket.com/event/israel-x-hezbollah-ceasefire-in-2024.
+- Category: Geopolitics / ceasefire.
+- Resolution / dispute date: Late November 2024. The Israel-Lebanon ceasefire was signed November 26, 2024, effective November 27, 2024. The case resurfaced prominently in 2025 to 2026 coverage (WSJ investigation, cryptonews, The Currency).
+- Resolution criteria as written (reported, NOT confirmed verbatim): Resolves Yes if Israel and Hezbollah both officially announce an armistice, ceasefire, or negotiated settlement effective by December 31, 2024, 11:59 PM ET; must pertain to all theaters of conflict; declared through official channels by both parties; humanitarian pauses excluded; one party alone insufficient.
+- What it intended to ask: Whether Israel and Hezbollah would officially reach a ceasefire by the end of 2024.
+- Source of dispute: The actual deal was between Israel and the Lebanese government, not nominally "Hezbollah." A trader, Garrick Wilhelm (British Columbia), bet 567 dollars on No, arguing that under the rules a Lebanon deal was not a Hezbollah deal. Other traders argued it counted.
+- How contested: Escalated to the UMA oracle. About 87 percent of UMA token voters ruled that the Israel-Lebanon ceasefire applied (resolving against Wilhelm's No). The ruling could not be overturned.
+- Final resolution and who decided: Resolved effectively Yes (the ceasefire applied), decided by UMA token holders (about 87 percent).
+- Seen as correct or contested: Heavily contested; became an emblem case in UMA structural-risk and CFTC-scrutiny coverage (it is one of the human-interest anchors of the WSJ May 2026 investigation).
+- Root-cause tag: Entity-scope ambiguity (Hezbollah versus the Lebanese government) in the resolution language.
+- Sources: cryptonews.com/news/polymarket-oracle-risk-cftc-regulatory-scrutiny; finance.yahoo.com/markets/crypto/articles/polymarket-crisis-oracle-risk-regulatory-073158778.html; kucoin.com/news/flash/polymarket-disputes-ruled-by-mysterious-uma-token-holders; thecurrency.news/articles/227498/the-mysterious-crypto-judges-who-settle-polymarket-disputes; en.wikipedia.org/wiki/2024_Israel-Lebanon_ceasefire_agreement.
+
+### 4. TikTok banned in the US before May 2025
 
 - Market title and URL: "TikTok banned in the US before May 2025?" Related: polymarket.com/event/will-supreme-court-delay-the-tiktok-ban.
 - Category: Current events ("did X happen by date").
@@ -83,7 +100,21 @@ The table is ordered chronologically rather than by category. Reason: the most i
 - Root-cause tag: Literal wording ("banned"/"enacted") versus real-world enforcement reality.
 - Sources: cointelegraph.com/news/polymarket-faces-backlash-over-tik-tok-ban-prediction-resolution; dlnews.com/articles/markets/tiktok-disappearance-sparks-polymarket-petition; change.org/p/demand-accountability-for-suspected-manipulation-on-polymarket-tiktok-ban-vote; cryptonews.com/news/polymarket-faces-backlash-over-tiktok-ban-prediction-market-resolution.
 
-### 4. Ukraine agrees to Trump mineral deal before April?
+### 5. Gold missing from Fort Knox?
+
+- Market title and URL: "Gold missing from Fort Knox?" polymarket.com/event/gold-missing-from-fort-knox. A market created in the ZeroHedge orbit asking whether the US Government would confirm Fort Knox holds less gold than recorded. NOTE: distinct from a separate "Will DOGE audit Fort Knox before May?" market; the documented dispute is this "missing gold" market.
+- Category: Geopolitics / US government.
+- Resolution / dispute date: Early to mid March 2025 (analyst flag around March 11, 2025).
+- Resolution criteria as written: NOT confirmed verbatim. Search summaries paraphrase it as resolving on whether the US Government would confirm Fort Knox holds less gold than previously recorded. Verify on the live page.
+- What it intended to ask: Whether an official confirmation would emerge that Fort Knox's gold holdings were short of the recorded amount.
+- Source of dispute: The market resolved No. A Norway-based equity analyst, Folke Hermansen, publicly flagged it (X thread) as manipulated by UMA whales, alleging two addresses controlled over half the votes and one whale cast about 25 percent of the votes in that market. About 3.5 million dollars in value was implicated.
+- How contested: The UMA oracle vote was alleged to be captured by whales. Polymarket apologized on its Discord, reportedly calling it an "unprecedented situation." No clean record was found of formal multi-round DVM re-proposals overturning the result; the No outcome stood.
+- Final resolution and who decided: No, decided via UMA token-holder vote; not reversed.
+- Seen as correct or contested: Strongly contested (manipulation allegations). Grouped by industry guides with the Ukraine minerals deal and UFO markets as part of more than 30 million dollars in 2025 controversial resolutions (that aggregate is a secondary-guide claim).
+- Root-cause tag: UMA voting-power concentration (whale capture).
+- Sources: decrypt.co/311634/polymarket-allegations-oracle-manipulation; polymarket.com/event/gold-missing-from-fort-knox; en.cryptonomist.ch/2025/02/18/polymarket-bets-on-the-audit-of-fort-knox-while-the-debate-on-gold-reserves-grows.
+
+### 6. Ukraine agrees to Trump mineral deal before April?
 
 - Market title and URL: "Ukraine agrees to Trump mineral deal before April?" Slug "ukraine-agrees-to-give-trump-rare-earth-metals-before-april." polymarket.com/event/ukraine-agrees-to-give-trump-rare-earth-metals-before-april.
 - Category: Geopolitics / current events.
@@ -98,7 +129,7 @@ The table is ordered chronologically rather than by category. Reason: the most i
 - Root-cause tag: Oracle governance attack via token-weighted whale voting.
 - Sources: theblock.co/post/348171/polymarket-says-governance-attack-by-uma-whale-to-hijack-a-bets-resolution-is-unprecedented; coindesk.com/markets/2025/03/27/polymarket-uma-communities-lock-horns-after-usd7m-ukraine-bet-resolves; thedefiant.io/news/defi/polymarket-s-usd7m-ukraine-mineral-deal-debacle-traced-to-oracle-whale; cointelegraph.com/news/polymarket-trump-ukraine-bet-whale-governance-attack.
 
-### 5. Will Zelenskyy wear a suit before July?
+### 7. Will Zelenskyy wear a suit before July?
 
 - Market title and URL: "Will Zelenskyy wear a suit before July?" polymarket.com/event/will-zelenskyy-wear-a-suit-before-july. Note sibling markets exist ("before June," "before Friday," "next Trump meeting"); do not conflate.
 - Category: Current events (novelty market with geopolitical subject).
@@ -113,7 +144,25 @@ The table is ordered chronologically rather than by category. Reason: the most i
 - Root-cause tag: Subjective, ambiguous resolution criterion ("is it a suit?") colliding with token-weighted oracle voting.
 - Sources: decrypt.co/329210/polymarket-rules-no-237m-bet-zelenskyys; coindesk.com/markets/2025/07/07/polymarket-embroiled-in-usd160m-controversy-over-whether-zelensky-wore-a-suit-at-nato; coindesk.com/markets/2025/07/09/this-isnt-decentralized-says-polymarket-power-user-as-zelenskyys-suit-controversy-unfolds; dlnews.com/articles/markets/polymarket-bettors-clash-over-zelenskyy-suit-dispute.
 
-### 6. Trump declassifies UFO files in 2025?
+### 8. Thailand strikes Cambodia by [date]?
+
+- Market title and URL: "Thailand strikes Cambodia by [date]?" a dated series (for example polymarket.com/event/thailand-strikes-cambodia-by-july-31). Documented as a case study on the PolymarketGuide Archive (GitBook).
+- Category: Geopolitics / military conflict.
+- Resolution / dispute date: Late July 2025; rolled-vote resolution reported around July 30, 2025. Real-world basis: Thailand launched airstrikes on Cambodian military targets around July 24, 2025 amid the border crisis.
+- Resolution criteria as written: NOT confirmed verbatim (not surfaced in search). The dispute hinged on whether confirmed strikes met the bar versus "Too Early."
+- What it intended to ask: Whether Thailand conducted a military strike on Cambodia by the deadline.
+- Source of dispute: A timing/standard ambiguity between Yes and "Too Early," combined with whale voting power temporarily inflating the "Too Early" option.
+- How contested (the strongest-documented dispute mechanics in this dataset):
+  - Dispute vote 1: P2 (Yes) 57.8%, P4 (Too Early) 30.8%, others about 12.4%.
+  - Dispute vote 2: P2 (Yes) 65.2%, P4 (Too Early) 34.8%.
+  - "Too Early" share was attributed to a few top UMA whales (P4 was backed by under about 6 percent of voters by count). No consensus threshold was met, so the vote rolled and users got 24 hours to discuss and revote.
+  - Rolled vote: P2 (Yes) 95.89%, P4 (Too Early) 3.69%, P1 (No) 0.41%.
+- Final resolution and who decided: Resolved Yes via UMA token-holder vote after the roll.
+- Seen as correct or contested: The Yes outcome is widely seen as correct on the facts, but the process was contested because whale voting power temporarily propped up "Too Early."
+- Root-cause tag: Timing-criterion ambiguity ("Too Early" versus Yes) amplified by whale vote distortion.
+- Sources: polymarketguide.gitbook.io/polymarketguide-archive/case-studies/did-thailand-strike-cambodia/market-resolution; en.wikipedia.org/wiki/2025_Cambodian-Thai_border_crisis; polymarket.com/event/thailand-strikes-cambodia-by-july-31.
+
+### 9. Trump declassifies UFO files in 2025?
 
 - Market title and URL: "Trump declassifies UFO files in 2025?" slug "trump-declassifies-ufo-files-in-2025." polymarket.com/event/trump-declassifies-ufo-files-in-2025.
 - Category: Current events / politics.
@@ -128,21 +177,7 @@ The table is ordered chronologically rather than by category. Reason: the most i
 - Root-cause tag: Undefined key term ("declassify") satisfied by a routine media release, plus token-weighted whale capture.
 - Sources: cryptoslate.com/polymarket-faces-major-credibility-crisis-after-whales-forced-a-yes-ufo-vote-without-evidence; ainvest.com/news/decentralized-oracles-market-manipulation-polymarket-ufo-contract-case-study-2512; cryptoslate.com/how-a-jellyfish-ufo-video-and-pdf-fueled-the-controversial-1700-polymarket-explosion; finance.yahoo.com/markets/crypto/articles/pentagon-drops-first-ever-alien-160618372.html.
 
-### 7. Who will Trump talk to in March? (Trump-Xi call)
-
-- Market title and URL: "Who will Trump talk to in March?" polymarket.com/event/who-will-trump-talk-to-in-march. Contested sub-outcome: whether Trump spoke with Xi Jinping.
-- Category: Current events / political statement.
-- Dispute date: Late March 2026 (around March 30).
-- Resolution criteria as written (reported): Resolution source is "a consensus of credible reporting." Polymarket's clarifying statement: "there is not a consensus of credible reporting that Trump has spoken to Xi in March."
-- What it intended to ask: Whether Trump actually held a call with Xi during March, verified by credible reporting.
-- Source of dispute: Trump announced he had spoken with Xi over the weekend, but China never confirmed. Odds swung from about 24 to about 79 percent on Trump's claim, fell to about 16 percent, then a large UMA token voter switched No to Yes, dragging price back to about 94 percent.
-- How contested: A single large UMA holder pushed toward Yes; Polymarket publicly refuted its own oracle's voters.
-- Final resolution and who decided: Resolved No on the Trump-Xi question; Polymarket effectively overrode the UMA whale's direction by clarifying intent (the Xi odds collapsed from about 70 to about 2 percent).
-- Seen as correct or contested: The No outcome is seen as substantively correct, but the episode is cited as evidence a single whale can hijack a vote and that Polymarket must override its own oracle.
-- Root-cause tag: Oracle capture by a large UMA holder versus an unverified principal claim.
-- Sources: predictionnews.com/news/polymarket-overrules-uma-voters-in-trump-xi-call-market; polymarket.com/event/who-will-trump-talk-to-in-march.
-
-### 8. Cardi B performs at the Super Bowl LX halftime show?
+### 10. Cardi B performs at the Super Bowl LX halftime show?
 
 - Market title and URL: Polymarket contract on whether Cardi B would perform at the Super Bowl LX halftime show (Bad Bunny's set). Exact slug not isolated; about 10 million dollars volume.
 - Category: Sports / current-events prop.
@@ -156,7 +191,21 @@ The table is ordered chronologically rather than by category. Reason: the most i
 - Root-cause tag: Undefined key term ("perform") plus platform discretion.
 - Sources: nbcnews.com/business/business-news/cardi-b-cameo-bad-bunnys-super-bowl-halftime-show-leads-dispute-predi-rcna258553; cbsnews.com/news/cardi-b-super-bowl-prediction-market-dispute; foxsports.com/articles/nfl/cardi-bs-cameo-in-bad-bunnys-super-bowl-halftime-show-leads-to-dispute-on-prediction-markets; readwrite.com/cftc-complaint-filed-kalshi-cardi-b-super-bowl-event-decision.
 
-### 9. Strategy (MicroStrategy) sold any Bitcoin by May 31, 2026?
+### 11. Who will Trump talk to in March? (Trump-Xi call)
+
+- Market title and URL: "Who will Trump talk to in March?" polymarket.com/event/who-will-trump-talk-to-in-march. Contested sub-outcome: whether Trump spoke with Xi Jinping.
+- Category: Current events / political statement.
+- Dispute date: Late March 2026 (around March 30).
+- Resolution criteria as written (reported): Resolution source is "a consensus of credible reporting." Polymarket's clarifying statement: "there is not a consensus of credible reporting that Trump has spoken to Xi in March."
+- What it intended to ask: Whether Trump actually held a call with Xi during March, verified by credible reporting.
+- Source of dispute: Trump announced he had spoken with Xi over the weekend, but China never confirmed. Odds swung from about 24 to about 79 percent on Trump's claim, fell to about 16 percent, then a large UMA token voter switched No to Yes, dragging price back to about 94 percent.
+- How contested: A single large UMA holder pushed toward Yes; Polymarket publicly refuted its own oracle's voters.
+- Final resolution and who decided: Resolved No on the Trump-Xi question; Polymarket effectively overrode the UMA whale's direction by clarifying intent (the Xi odds collapsed from about 70 to about 2 percent).
+- Seen as correct or contested: The No outcome is seen as substantively correct, but the episode is cited as evidence a single whale can hijack a vote and that Polymarket must override its own oracle.
+- Root-cause tag: Oracle capture by a large UMA holder versus an unverified principal claim.
+- Sources: predictionnews.com/news/polymarket-overrules-uma-voters-in-trump-xi-call-market; polymarket.com/event/who-will-trump-talk-to-in-march.
+
+### 12. Strategy (MicroStrategy) sold any Bitcoin by May 31, 2026?
 
 - Market title and URL: Reported as "MicroStrategy sells any Bitcoin by May 31, 2026?" (paired companion contract for June 30). Exact on-platform title UNVERIFIED; confirm on the Polymarket event page.
 - Category: Crypto / corporate action (Bitcoin-adjacent).
@@ -171,7 +220,7 @@ The table is ordered chronologically rather than by category. Reason: the most i
 - Root-cause tag: Occurrence-date versus public-disclosure-date ambiguity, plus alleged retroactive rule clarification.
 - Sources: theblock.co/post/403600/polymarket-upholds-no-outcome-strategy-bitcoin-sale-market; coindesk.com/markets/2026/06/04/polymarket-says-no-for-may-yes-for-june-after-strategy-s-recent-bitcoin-sale; coindesk.com/markets/2026/06/01/strategy-s-bitcoin-sale-sparks-a-usd14-million-crypto-betting-chaos-on-a-major-prediction-market; cryptotimes.io/2026/06/02/polymarket-accused-of-retroactive-rule-changes-in-strategys-bitcoin-sell-market; thedefiant.io/news/markets/usd85m-polymarket-dispute-over-strategy-s-may-bitcoin-sale-puts-uma-s-token-voting-oracle-on.
 
-### 10. US x Iran permanent peace deal by deadline?
+### 13. US x Iran permanent peace deal by deadline?
 
 - Market title and URL: "US x Iran permanent peace deal by...?" polymarket.com/event/us-x-iran-permanent-peace-deal-by.
 - Category: Geopolitics / war.
@@ -195,11 +244,12 @@ This layer is the backbone for arguing that the problem is the rulebook and the 
 - Verified findings (corroborated across aggregators reproducing the WSJ text):
   - In most disputed markets, more than 50 percent of voting power is concentrated in the ten largest wallets.
   - At least 60 percent of active UMA voters over the prior year could be linked to live Polymarket accounts.
-  - In nearly one in five disputes, at least one voter had a financial stake in the outcome.
+  - In nearly one in five disputes, at least one voter had a financial stake in the outcome (other coverage cites "more than 300 disputes" with voters holding direct financial interests).
   - Polymarket told the WSJ that only 0.2 percent of contracts trigger UMA votes.
   - An anonymous voter ("Scout") reportedly said: "You can either have traders with a conflict of interest, or morons with no conflict of interest." (Confirm verbatim against WSJ.)
+  - The Israel-Hezbollah / Garrick Wilhelm case (entry 3) is one of the human-interest anchors of this investigation.
   - Contrast: rival Kalshi resolves disputes internally rather than via a token oracle.
-- Sources: securitiesdocket.com/2026/05/18/the-mysterious-crypto-judges-who-settle-polymarket-disputes-wsj; gate.com/news/detail/the-wall-street-journal-investigates-polymarket-arbitration-system-21183884.
+- Sources: securitiesdocket.com/2026/05/18/the-mysterious-crypto-judges-who-settle-polymarket-disputes-wsj; thecurrency.news/articles/227498/the-mysterious-crypto-judges-who-settle-polymarket-disputes; gate.com/news/detail/the-wall-street-journal-investigates-polymarket-arbitration-system-21183884.
 
 ### B. Bloomberg "nine whales" investigation (May 2026)
 
@@ -221,56 +271,70 @@ This layer is the backbone for arguing that the problem is the rulebook and the 
 
 ### E. "Whale Hunters" and vote-consolidation tooling
 
-- A Discord group of losing traders ("Whale Hunters") formed to denounce suspected backroom dealing by top UMA voters, directing attention at UMA.rocks, a tool that lets holders consolidate and delegate voting power. A named trader, Garrick Wilhelm (British Columbia), reportedly bet 567 dollars that Israel and Hezbollah would not reach a ceasefire; about 87 percent of UMA voters ruled the Israel-Lebanon ceasefire applied, so he lost. Confidence MEDIUM (aggregators reproducing WSJ/Decrypt). This is a candidate eleventh micro-case (the Israel-Hezbollah ceasefire wager) but the market-level detail is too thin to promote to the main table; verify via the WSJ original and decrypt.co/311634.
+- A Discord group of losing traders ("Whale Hunters") formed to denounce suspected backroom dealing by top UMA voters, directing attention at UMA.rocks, a tool that lets holders consolidate and delegate voting power. Confidence MEDIUM (aggregators reproducing WSJ/Decrypt). Verify via the WSJ original and decrypt.co/311634.
 - Sources: kucoin.com/news/flash/polymarket-dispute-resolution-system-under-scrutiny-as-uma-voting-raises-fraud-concerns; decrypt.co/311634/polymarket-allegations-oracle-manipulation.
+
+### F. Academic and analytical sources on the dispute population
+
+- arXiv paper "Can LLMs Help Decentralized Dispute Arbitration? A Case Study of UMA-Resolved Markets on Polymarket" (arxiv.org/abs/2604.15674, submitted April 17, 2026). Full text could not be loaded (403); figures below are from the abstract via search.
+  - Category distribution of disputed events: Sports about 31.5 percent, Politics about 20.4 percent, Crypto about 16.7 percent (the three largest categories).
+  - Disputed-event trading volume on Polymarket cited at about 972 million dollars.
+  - Web-enabled LLMs reproduce UMA's final resolution about 89.58 percent of the time once a dispute is raised; top models (DeepSeek V3.1, Qwen Max, Claude 4.5 Sonnet) reach about 88 to 90 percent, with the latter two above 95 percent stability.
+  - The paper attributes dispute formation mainly to external real-world factors (evolving facts, unstable or incomplete evidence, conflicting reports, media dynamics, delays) and finds that text cues alone cannot reliably predict in advance which events will be disputed.
+  - IMPORTANT sampling implication for this database: the academic distribution says SPORTS is the single largest dispute category, but press coverage (and therefore this hand-built list) heavily over-samples politics, geopolitics, and novelty markets and under-samples sports. Only one sports dispute (Cardi B, entry 10) is captured here. The true population of disputes is larger and more sports-weighted than the press-driven sample below suggests.
+- LessWrong, "Ambiguity in Prediction Market Resolution is Still Harmful" (lesswrong.com/posts/d4YjM6RWEoT3rBEHe; follow-up to lesswrong.com/posts/DpDnXHcPejd9tn8R5). Core argument: ambiguity adds risk to arbitrage, because two markets on the same event can resolve their ambiguity inconsistently, which discourages the trading that makes markets accurate. Names the Venezuela, Zelenskyy suit, TikTok, and Barron Trump cases (all already in this database); no new named markets surfaced. Full text not loadable (403).
 
 ## Analysis layer: root causes by frequency and consequence
 
 Each case is tagged with a primary cause and, where relevant, contributing causes. Several disputes are multi-cause; the most consequential ones combine ambiguous wording with token-weighted voting.
 
-| Root cause | Cases (primary) | Cases (contributing) | Frequency |
-|------------|-----------------|----------------------|-----------|
-| Ambiguous wording / undefined key terms | Zelenskyy suit (5), UFO (6), Cardi B (8), US-Iran (10), TikTok (3) | Strategy (9) | Most frequent (5 primary) |
-| Oracle manipulation / whale voting | Ukraine mineral (4), Trump-Xi (7) | UFO (6), Strategy (9) | High and most consequential by dollars |
-| Conflicting or unnamed data sources | Venezuela (1) | US-Iran (10) | Low count, high stakes |
-| Timing / cutoff ambiguity + retroactive rules | Strategy (9) | Ukraine mineral (4) | Low count, growing |
-| Platform-vs-oracle conflict / title-vs-rules mismatch | Barron Trump (2), Trump-Xi (7) | UFO (6) | Recurring |
-| Unforeseen real-world edge case | (contributes across) TikTok (3), Cardi B (8), US-Iran (10) | n/a | Pervasive as a trigger |
+| Root cause | Cases where it is the PRIMARY driver | Cases where it CONTRIBUTES | Primary count |
+|------------|--------------------------------------|----------------------------|---------------|
+| Ambiguous wording / undefined key terms | Israel-Hezbollah (3), TikTok (4), Zelenskyy (7), UFO (9), Cardi B (10), US-Iran (13) | Strategy (12), Thailand (8) | 6 |
+| Oracle manipulation / whale voting | Fort Knox (5), Ukraine mineral (6), Trump-Xi (11) | Israel-Hezbollah (3), Zelenskyy (7), Thailand (8), UFO (9), Strategy (12) | 3 |
+| Conflicting or unnamed data sources | Venezuela (2) | US-Iran (13) | 1 |
+| Timing / cutoff ambiguity (and retroactive rules) | Thailand (8), Strategy (12) | Ukraine mineral (6) | 2 |
+| Platform-vs-oracle conflict / title-vs-rules mismatch | Barron Trump (1) | Trump-Xi (11), UFO (9) | 1 |
+| Unforeseen real-world edge case (trigger, not root) | (none alone) | TikTok (4), Cardi B (10), US-Iran (13), Strategy (12) | 0 |
 
-Most frequent cause: ambiguous wording and undefined key terms. Five of ten markets turned primarily on a word the rules never pinned down: "suit," "declassify," "perform," "permanent," "banned." These are not exotic edge cases; they are ordinary words that the writers assumed were self-evident.
+Most frequent primary cause: ambiguous wording and undefined key terms (6 of 13). Markets turned primarily on a word the rules never pinned down: "suit," "declassify," "perform," "permanent," "banned," and "Hezbollah" (as an entity). These are not exotic edge cases; they are ordinary words the writers assumed were self-evident.
 
-Most consequential cause: oracle manipulation and whale voting, measured by dollars at stake and by reputational damage. The Ukraine mineral deal (about 7M, premature Yes), the UFO market (about 16M, Yes with no documents), and the Strategy market (tens of millions, 98.6 percent of voting power for No) are the cases that turned "the rules were fuzzy" into "the resolver itself is capturable." The WSJ and Bloomberg investigations show this is structural, not anecdotal: roughly half of voting power sits in about nine to ten wallets, and roughly one in five disputes has a conflicted voter.
+Most consequential and most pervasive cause: oracle manipulation and whale voting. It is the PRIMARY driver in 3 cases but a CONTRIBUTING factor in at least 5 more, so token-weighted voting touches 8 of 13 disputes (about 60 percent). It is also the most consequential by dollars and by reputational damage: the Ukraine mineral deal (premature Yes), Fort Knox (No with manipulation alleged), UFO (Yes with no documents), and Strategy (98.6 percent of voting power) are the cases that turned "the rules were fuzzy" into "the resolver itself is capturable." The WSJ and Bloomberg investigations confirm this is structural: roughly half of voting power sits in about nine to ten wallets, and roughly one in five disputes has a conflicted voter.
 
-The two interact. Ambiguous wording is what creates a disputable market in the first place; whale voting is what decides the dispute once it exists. A market with airtight wording rarely reaches the oracle (Polymarket says only 0.2 percent of contracts trigger a vote). So the rules-design lesson is twofold: tighten the wording to keep markets out of the oracle, and fix the oracle for the residual that still gets there.
+The two interact, and that interaction is the core finding. Ambiguous wording is what creates a disputable market in the first place; whale voting is what decides the dispute once it exists. A market with airtight wording rarely reaches the oracle (Polymarket says only 0.2 percent of contracts trigger a vote). So the rules-design lesson is twofold: tighten the wording to keep markets out of the oracle, and fix the oracle for the residual that still gets there.
 
 ## Written summary of the patterns
 
-1. The recurring failure is definitional, not factual. In almost every case the underlying facts were not in serious dispute (Zelenskyy wore a blazer; Cardi B danced without singing; Strategy sold 32 BTC and disclosed a day late). What was in dispute was whether those agreed facts satisfied an underspecified word. Rules that define the key term, name the exact evidentiary threshold, and pre-commit the resolution source would have prevented most of these.
+1. The recurring failure is definitional, not factual. In almost every case the underlying facts were not in serious dispute (Zelenskyy wore a blazer; Cardi B danced without singing; Strategy sold 32 BTC and disclosed a day late; the ceasefire was with Lebanon's government). What was disputed was whether those agreed facts satisfied an underspecified word. Rules that define the key term, name the exact evidentiary threshold, and pre-commit the resolution source would have prevented most of these.
 
 2. "Consensus of credible reporting" is the single most dangerous phrase in the dataset. It appears in the Zelenskyy, UFO, Trump-Xi, and (as a fallback) Venezuela markets, and it converts a factual question into a subjective vote about whether enough outlets agreed. It is the clause most often left to whale discretion.
 
-3. Source hierarchies that can point two ways are a structural trap. Venezuela is the cleanest example: naming both "official information" and "credible reporting" guaranteed a conflict the moment the official count and the observed count diverged. A rule must say which source wins when they disagree.
+3. Source hierarchies and entity definitions that can point two ways are a structural trap. Venezuela (official versus credible reporting) and Israel-Hezbollah (Hezbollah versus the Lebanese government) both guaranteed a conflict the moment reality split the difference. A rule must say which source wins when they disagree, and must define exactly which entities or events count.
 
-4. Timing and disclosure are under-specified almost everywhere. The Strategy market shows that "by date X" is ambiguous between when an event occurs and when it becomes public. Markets need to fix the clock explicitly: occurrence time or disclosure time, and in which time zone, with what evidentiary cutoff.
+4. Timing and disclosure are under-specified almost everywhere. Strategy shows that "by date X" is ambiguous between when an event occurs and when it becomes public; Thailand shows "Too Early" is a timing judgment that whales can game. Markets need to fix the clock explicitly: occurrence time or disclosure time, in which time zone, with what evidentiary cutoff.
 
 5. The resolver design is now the story. Through 2024 the disputes read as wording fights; by 2025 to 2026 the dominant narrative is oracle capture, because token-weighted voting lets concentrated holders decide outcomes, sometimes with a direct financial stake. Polymarket has had to publicly override its own oracle (Barron Trump, Trump-Xi), which undercuts the "decentralized resolution" claim. The reforms (UMIP-189 whitelist, Chainlink for price markets) are an admission that the original design did not hold.
 
 6. Cross-platform divergence (Cardi B: Polymarket Yes, Kalshi refund) is strong evidence for the article's thesis: identical facts produce opposite payouts purely because of how each venue wrote and adjudicated its rule. That is the clearest possible demonstration that rule-writing, not reality, is doing the work.
 
+7. The "morally right, procedurally wrong" pattern recurs. Venezuela (Gonzalez), Thailand (Yes), and Trump-Xi (No) all reached the outcome most observers consider correct, but by overriding stated rules or by surviving whale distortion. For a rules-design article this is the sharpest tension: a resolver that reaches the right answer the wrong way is still a broken resolver, because the next case may reach the wrong answer by the same mechanism.
+
 ## Where the record is incomplete or uncertain (flagged explicitly)
 
-- Verbatim criteria and exact vote tallies. No live Polymarket event page or UMA DVM record could be loaded this session (HTTP 403 environment-wide). All quoted criteria are reproduced from outlet text in search summaries. Re-pull from the source pages before printing any quotation as exact.
+- Verbatim criteria and exact vote tallies. No live Polymarket event page or UMA DVM record could be loaded this session (HTTP 403 environment-wide). All quoted criteria are reproduced from outlet text in search summaries. Re-pull from the source pages before printing any quotation as exact. The one case with well-documented round-by-round vote shares (Thailand, entry 8) still has its criteria text UNVERIFIED.
 - Date and attribution corrections already applied: WSJ investigation is May 2026 (not 2025); the "nine whales" finding is Bloomberg (May 2026); the "unprecedented" quote came from Polymarket, not UMA; the Zelenskyy window appears to be May 22 to June 30 (not March 22).
-- Single-sourced figures to re-confirm: the Ukraine whale's 5M tokens / 3 accounts / 25 percent (one researcher's analysis); BornTooLate.eth at about 1.3M UMA; the Strategy market dollar volume (ranges 60M to 130M across outlets); UMIP-189 eligibility thresholds (two conflicting versions) and the August 6, 2025 pass date.
-- Null results, reported honestly rather than padded: no verifiable contested UMA resolution was found for a crypto price-target market (the XRP 15-minute case was deterministic spot-price manipulation, not a dispute) or for an economic-data market (Fed, CPI, jobs, recession markets use well-specified named sources and produced no sourceable dispute). If these categories matter to the article, the place to look is the UMA DVM voting log for specific FOMC/CPI/NFP assertion IDs.
-- Leads found but not verified as actual disputes (do not cite as disputes without confirmation): "Did Thailand strike Cambodia?" clarification; Russia-Ukraine ceasefire-deadline markets; Gaza/Israel-Hamas ceasefire markets (Oct 2025); Trump-Greenland markets; TIME Person of the Year markets; Biden dropout and "what day will the AP call the election" markets; the Fort Knox gold audit market (named as a 2025 controversial resolution but not detailed here). Each has clear criteria but no confirmed contested resolution event in the sources reached.
-- Highest-value unread primary sources: the LessWrong post (lesswrong.com/posts/d4YjM6RWEoT3rBEHe) and the arXiv paper "Can LLMs Help Decentralized Dispute Arbitration? A Case Study of UMA-Resolved Markets on Polymarket" (arxiv.org/abs/2604.15674). Both likely contain a larger itemized case list and should be opened directly to extend this database.
+- Single-sourced figures to re-confirm: the Ukraine whale's 5M tokens / 3 accounts / 25 percent (one researcher's analysis); BornTooLate.eth at about 1.3M UMA; the Fort Knox "two addresses over half the votes / one whale 25 percent" figures (one analyst's X thread); the Strategy market dollar volume (ranges 60M to 130M across outlets); UMIP-189 eligibility thresholds (two conflicting versions) and the August 6, 2025 pass date.
+- Distinct markets not to conflate: the Fort Knox dispute is the "Gold missing from Fort Knox" market, not the separate "Will DOGE audit Fort Knox before May?" market. The $7M Ukraine dispute is the "minerals/mineral deal" market, not any Russia-Ukraine ceasefire-deadline market.
+- Null results, reported honestly rather than padded: no verifiable contested UMA resolution was found for a crypto price-target market (the XRP 15-minute case was deterministic spot-price manipulation, not a dispute); no verifiable contested resolution found for an economic-data market (Fed, CPI, jobs, recession markets use well-specified named sources); Russia-Ukraine ceasefire-deadline markets and Gaza/Israel-Hamas October 2025 ceasefire markets resolved or expired cleanly with no documented dispute. If these categories matter to the article, the place to look is the UMA DVM voting log for specific assertion IDs.
+- Leads found but not verified as actual disputes (do not cite as disputes without confirmation): Trump-Greenland markets; TIME Person of the Year markets; Biden dropout and "what day will the AP call the election" markets (criteria confirmed, no contested resolution found); Epstein disclosure markets (market exists, no dispute confirmed). Each has clear criteria but no confirmed contested resolution event in the sources reached.
+- Meta-sources mined at abstract level only: the LessWrong post (lesswrong.com/posts/d4YjM6RWEoT3rBEHe) and the arXiv paper (arxiv.org/abs/2604.15674) were both searched but could not be fully loaded (403). The LessWrong post named no markets beyond those already here. The arXiv abstract gave category percentages and aggregate figures (see structural layer F) but its abstract names no individual market; the full paper body, where any case studies would appear, remains unread. Open both with a non-blocked fetch to extract any additional itemized cases.
+- Sampling bias (important): this is a press-driven sample. The arXiv category data (Sports about 31.5 percent of disputes) indicates the real dispute population is larger and far more sports-weighted than the 13 cases here, which are dominated by politics, geopolitics, and novelty markets because those are what the press covers. Treat this database as a high-significance sample, not a representative census, especially for the sports and crypto-price categories.
 
 ## Recommended batching to extend the dataset
 
-This first pass covers the most significant and best-documented cases. To complete a fuller census without padding, batch as follows, most valuable first:
+This pass covers the most significant and best-documented cases (13 disputes plus the structural layer). To complete a fuller census without padding, batch as follows, most valuable first:
 
-1. Primary-source hardening of these 10 (highest priority): open each Polymarket event page and the matching UMA DVM assertion to capture verbatim rules and exact vote splits.
-2. The two unread meta-sources (LessWrong, arXiv paper) to harvest any additional itemized disputes.
-3. By category, the under-covered buckets: sports (beyond Cardi B), and the geopolitics ceasefire/deadline family (Russia-Ukraine, Gaza, Iran sub-markets), using the UMA dispute log around each deadline.
+1. Primary-source hardening of these 13 (highest priority): open each Polymarket event page and the matching UMA DVM assertion to capture verbatim rules and exact vote splits. Thailand (entry 8) is the model for the level of vote-by-vote detail to capture for the others.
+2. The two meta-sources (LessWrong, arXiv paper) to harvest any additional itemized disputes.
+3. By category, the under-covered buckets: sports (beyond Cardi B) and the geopolitics ceasefire/conflict family (re-check each deadline market against the UMA dispute log, since clean-looking resolutions can still have had a challenged proposal).
 4. By quarter, a systematic sweep of the UMA DVM voting history for 2024 Q3 through 2026 Q2 to catch lower-profile disputes that never made the press.
